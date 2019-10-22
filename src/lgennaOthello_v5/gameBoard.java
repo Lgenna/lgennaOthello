@@ -6,9 +6,8 @@ import java.util.Scanner;
 
 public class gameBoard {
 
-	
-	private static boolean choseColors = false, receivedValidMove = false, printedBoard = false, gameOver = false, myTurn;
-	private static int opponentColor = 1, myColor = 1, whosTurn = 0, counter = 0;
+	private static boolean choseColors, receivedValidMove, printedBoard, gameOver, myTurn;
+	private static int opponentColor = 1, myColor = 1, moveCounter = 0;
 
 	private static String[] letterArray = { "a", "b", "c", "d", "e", "f", "g", "h" };
 
@@ -18,18 +17,18 @@ public class gameBoard {
 	private static ArrayList<Integer> blackPieceIds = new ArrayList<Integer>();
 	private static ArrayList<Integer> whitePieceIds = new ArrayList<Integer>();
 	private static ArrayList<MoveReturnCode> validMoves = new ArrayList<MoveReturnCode>();
-	private static ArrayList<Integer> numOfPiecesJumped = new ArrayList<Integer>();
-	private static ArrayList<Integer> finalCellsList = new ArrayList<Integer>();
-	private static ArrayList<Integer> piecesToFlip = new ArrayList<Integer>();
+//	private static ArrayList<Integer> numOfPiecesJumped = new ArrayList<Integer>();
+//	private static ArrayList<Integer> finalCellsList = new ArrayList<Integer>();
+	
 	
 	static String arguments;
 	
 	static int printMode = 0;
 	/**
-	 * 0 : Do not print Board or Moves (DEFAULT)
-	 * 1 : Print Board
-	 * 2 : Print Moves
-	 * 3 : Print Board & Moves
+	 * 0 : Do not print board or moves (DEFAULT)
+	 * 1 : Print board
+	 * 2 : Print moves
+	 * 3 : Print board & moves
 	 */
 	
 	static int playMode = 0;
@@ -44,30 +43,41 @@ public class gameBoard {
 	 */
 
 
+//		A Clean Board			    a   b   c   d   e   f   g   h
+	static int[] gameBoard =  { 2,  2,  2,  2,  2,  2,  2,  2,  2,  2, 
+								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 1
+		   						2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 2
+	   							2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 3
+	   							2,  0,  0,  0, -1,  1,  0,  0,  0,  2,  // 4
+	   							2,  0,  0,  0,  1, -1,  0,  0,  0,  2,  // 5
+	   							2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 6
+	   							2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 7
+			   					2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 8
+			   					2,  2,  2,  2,  2,  2,  2,  2,  2,  2 };
+
 ////		A Clean Board			    a   b   c   d   e   f   g   h
 //	static int[] gameBoard =  { 2,  2,  2,  2,  2,  2,  2,  2,  2,  2, 
 //								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 1
-//		   						2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 2
-//	   							2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 3
-//	   							2,  0,  0,  0, -1,  1,  0,  0,  0,  2,  // 4
-//	   							2,  0,  0,  0,  1, -1,  0,  0,  0,  2,  // 5
-//	   							2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 6
-//	   							2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 7
-//			   					2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 8
-//			   					2,  2,  2,  2,  2,  2,  2,  2,  2,  2 };
-
-//A game breaking board	    		a   b   c   d   e   f   g   h
-	static int[] gameBoard =  { 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,
-								2, -1,  0,  0, -1,  0,  0,  0,  0,  2,  // 1
-								2,  0, -1,  0, -1,  0,  0,  0, -1,  2,  // 2
-								2,  0,  0,  1, -1,  0,  0,  0,  1,  2,  // 3
-								2,  0,  1, -1, -1, -1,  0,  0,  0,  2,  // 4
-								2,  0, -1,  1, -1,  1, -1,  0, -1,  2,  // 5
-								2,  0,  0,  1,  1,  1,  1,  0,  1,  2,  // 6
-								2,  0,  0,  1,  1,  1,  0,  1,  1,  2,  // 7
-								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 8
-								2,  2,  2,  2,  2,  2,  2,  2,  2,  2 };
+//								2,  0, -1,  1,  1,  1,  1,  0,  0,  2,  // 2
+//								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 3
+//								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 4
+//								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 5
+//								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 6
+//								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 7
+//								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 8
+//								2,  2,  2,  2,  2,  2,  2,  2,  2,  2 };
 	
+////A game breaking board	    		a   b   c   d   e   f   g   h
+//	static int[] gameBoard =  { 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,
+//								2, -1,  0,  0, -1,  0,  0,  0,  0,  2,  // 1
+//								2,  0, -1,  0, -1,  0,  0,  0, -1,  2,  // 2
+//								2,  0,  0,  1, -1,  0,  0,  0,  1,  2,  // 3
+//								2,  0,  1, -1, -1, -1,  0,  0,  0,  2,  // 4
+//								2,  0, -1,  1, -1,  1, -1,  0, -1,  2,  // 5
+//								2,  0,  0,  1,  1,  1,  1,  0,  1,  2,  // 6
+//								2,  0,  0,  1,  1,  1,  0,  1,  1,  2,  // 7
+//								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 8
+//								2,  2,  2,  2,  2,  2,  2,  2,  2,  2 };
 	
 ////	A crashing board   ?	    a   b   c   d   e   f   g   h
 //	static int[] gameBoard =   {2,  2,  2,  2,  2,  2,  2,  2,  2,  2,
@@ -80,81 +90,6 @@ public class gameBoard {
 //								2, -1, -1,  1,  1,  1,  1,  1,  1,  2,  // 7
 //								2, -1, -1, -1,  0,  0,  0,  0,  0,  2,  // 8
 //								2,  2,  2,  2,  2,  2,  2,  2,  2,  2};
-	
-//	//	An entirely black board	   a  b  c  d  e  f  g  h
-//	static int[] gameBoard =  { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
-//								2, 1, 1, 1, 1, 1, 1, 1, 1, 2,  // 1
-//								2, 1, 1, 1, 1, 1, 1, 1, 1, 2,  // 2
-//								2, 1, 1, 1, 1, 1, 1, 1, 1, 2,  // 3
-//								2, 1, 1, 1, 1, 1, 1, 1, 1, 2,  // 4
-//								2, 1, 1, 1, 1, 1, 1, 1, 1, 2,  // 5
-//								2, 1, 1, 1, 1, 1, 1, 1, 1, 2,  // 6
-//								2, 1, 1, 1, 1, 1, 1, 1, 1, 2,  // 7
-//								2, 1, 1, 1, 1, 1, 1, 1, 1, 2,  // 8
-//								2, 2, 2, 2, 2, 2, 2, 2, 2, 2 };
-	
-//	//	A testing Board			    a   b   c   d   e   f   g   h
-//	static int[] gameBoard =  { 2,  2,  2,  2,  2,  2,  2,  2,  2,  2, 
-//								2,  1, -1, -1, -1,  0,  1,  0,  1,  2, // 1
-//		   						2,  0,  0,  0,  0,  0, -1, -1,  0,  2, // 2
-//	   							2,  0,  0,  0,  0,  0,  0, -1,  0,  2, // 3
-//	   							2,  1,  0,  1,  0,  0,  0,  0,  0,  2, // 4
-//	   							2,  0, -1, -1,  0, -1,  0,  0,  0,  2, // 5
-//	   							2,  1, -1,  0,  0,  0, -1,  0, -1,  2, // 6
-//	   							2,  0, -1, -1,  0,  0,  0, -1, -1,  2, // 7
-//			   					2,  1,  0,  1,  0,  0,  0,  0,  1,  2, // 8
-//			   					2,  2,  2,  2,  2,  2,  2,  2,  2,  2 };
-	
-	
-//	//	A max disk strat board	   a  b  c  d  e  f  g  h
-//	static int[] gameBoard =  { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
-//								2, 0, 1, 0, 1, 0, 1, 0, 1, 2,  // 1
-//		   						2, 0, -1, 0, 0, -1, -1, -1, 0, 2,  // 2
-//	   							2, 0, -1, 0, 1, -1, 0, -1, 1, 2,  // 3
-//	   							2, 0, -1, 0, 0, -1, -1, -1, 0, 2, // 4
-//	   							2, 0, 0, 0, 1, 0, 1, 0, 1, 2, // 5
-//	   							2, 1, -1, 0, 0, 0, 0, 0, 0, 2,  // 6
-//	   							2, 0, -1, -1, 0, 0, 0, 0, 0, 2,  // 7
-//			   					2, 1, 0, 1, 0, 0, 0, 0, 0, 2,  // 8
-//			   					2, 2, 2, 2, 2, 2, 2, 2, 2, 2 };
-
-//	//	An actual output board	   a  b  c  d  e  f  g  h
-//	static int[] gameBoard =  { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
-//								2, -1, 0, -1, 0, 0, 0, 0, 0, 2,  // 1
-//		   						2, -1, -1, -1, 0, 0, 0, 0, 0, 2,  // 2
-//	   							2, -1, -1, -1, -1, 0, 1, 1, 0, 2,  // 3
-//	   							2, -1, 1, -1, -1, -1, 1, 1, -1, 2, // 4
-//	   							2, -1, -1, -1, -1, 1, -1, 1, 1, 2, // 5
-//	   							2, -1, 1, 1, -1, -1, 1, 1, 1, 2,  // 6
-//	   							2, -1, 1, -1, -1, 0, 1, 1, 0, 2,  // 7
-//			   					2, 0, 1, 1, 0, 0, 0, 0, 1, 2,  // 8
-//			   					2, 2, 2, 2, 2, 2, 2, 2, 2, 2 };	
-	
-	
-//	//	A Max disk strat Board	   a  b  c  d  e  f  g  h
-//	static int[] gameBoard =  { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
-//								2, 0, 0, 0, 0, 0, 0, 0, 0, 2,  // 1
-//		   						2, 1, 0, 0, 0, 0, 0, 1, -1, 2,  // 2
-//	   							2, 1, 0, 0, 0, 0, 1, 0, -1, 2,  // 3
-//	   							2, 1, 0, 0, -1, 1, 0, 0, -1, 2, // 4
-//	   							2, 1, 0, 0, 1, -1, 0, 0, -1, 2, // 5
-//	   							2, 1, 0, 1, 0, 0, 0, 0, -1, 2,  // 6
-//	   							2, 1, 1, 0, 0, 0, 0, 0, -1, 2,  // 7
-//			   					2, -1, 0, 0, 0, 0, 0, 0, 1, 2,  // 8
-//			   					2, 2, 2, 2, 2, 2, 2, 2, 2, 2 };
-	
-////	Only moves for black board	   a  b  c  d  e  f  g  h
-//	static int[] gameBoard =  { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
-//								2, 0, 0, 0, 0, 0, 0, 0, 0, 2,  // 1
-//		   						2, 0, 0, 0, 0, 0, 0, 0, 0, 2,  // 2
-//	   							2, 0, 0, 0, -1, -1, -1, 0, 0, 2,  // 3
-//	   							2, 0, 0, 0, -1, 1, -1, 0, 0, 2, // 4
-//	   							2, 0, 0, 0, -1, -1, -1, 0, 0, 2, // 5
-//	   							2, 0, 0, 0, 0, 0, 0, 0, 0, 2,  // 6
-//	   							2, 0, 0, 0, 0, 0, 0, 0, 0, 2,  // 7
-//			   					2, 0, 0, 0, 0, 0, 0, 0, 0, 2,  // 8
-//			   					2, 2, 2, 2, 2, 2, 2, 2, 2, 2 };
-
 
 	/**
 	 * This method starts the game, it then keeps looping till 
@@ -214,7 +149,7 @@ public class gameBoard {
 		
 		System.out.println("C Current playstyle is " + playModeText + ".");
 		
-		while (gameOver == false) {
+		while (!gameOver) {
 			userInput();
 		}
 
@@ -239,7 +174,7 @@ public class gameBoard {
 	public static void printBoard() {
 		
 		if (printMode == 1 || printMode == 3) {
-			if (choseColors == true) {
+			if (choseColors) {
 	
 				int counter = 0;
 				int columnNumbers = 1;
@@ -276,8 +211,10 @@ public class gameBoard {
 	}
 
 	/**
-	 * THERE IS A WAY TO COMBINE checkEmptySpaces AND checkEmptySpacesForOpponent, I JUST HAVE NO IDEA HOW
-	 * I KNOW THERE IS A WAY, THERE HAS TO BE? RIGHT?!?
+	 * The reason why there are two methods that do very similar tasks is the result of reducing the usage
+	 *  of an "if" statement. Due to the recursion nature of these statements it can help reduce overall
+	 *  computational time if it checks who its calculating moves for before it starts rather than each time
+	 *  it runs an  iteration.
 	 * 
 	 * Both of these methods are nearly identical however the if statements are inverted
 	 * 
@@ -285,10 +222,6 @@ public class gameBoard {
 	 *  recursion to check if that newly added offset space is another opponent piece, it keeps doing the 
 	 *  recursion till it either runs into a player piece or the edge of the board.
 	 *  
-	 * I can see this being costly when there are a lot of opponent pieces and all of them are on the edges,
-	 *  like this method would be doing a lot of recursion to find out it can't make a move, not sure
-	 *  if this can be minimized.
-	 * 
 	 * @param emptySpace The empty cell which is currently being checked
 	 * @param offset This is the offset + the original offset so we can see if there are multiple
 	 * 	pieces in a row
@@ -296,62 +229,131 @@ public class gameBoard {
 	 *  is added to and the method needs to remember what the offset was before adding anything.
 	 */
 	
-	private static void checkEmptySpaces(int emptySpace, int offset, int origOffset) {
-		
-		if (myTurn) {
-			if (opponentPieceIds.contains(emptySpace + offset)) {
-				offset = offset + origOffset;
-				int addedOffset = emptySpace + offset;
-				if (!opponentPieceIds.contains(addedOffset) && myPieceIds.contains(addedOffset)) {
-					if (gameBoard[addedOffset] != 2) {
-						MoveReturnCode validMove = new MoveReturnCode(addedOffset, emptySpace, origOffset, piecesToFlip);
-						validMoves.add(validMove);
-					}
-				}
-				piecesToFlip.add(offset);
-				checkEmptySpaces(emptySpace, offset, origOffset);
-			}
-		} else {
-			if (myPieceIds.contains(emptySpace + offset)) {
-				offset = offset + origOffset;
-				int addedOffset = emptySpace + offset;
-				if (opponentPieceIds.contains(addedOffset) && !myPieceIds.contains(addedOffset)) {
-					if (gameBoard[addedOffset] != 2) {
-						MoveReturnCode validMove = new MoveReturnCode(addedOffset, emptySpace, origOffset, piecesToFlip);
-						validMoves.add(validMove);
-					}
-				}
-				piecesToFlip.add(offset);
-				checkEmptySpaces(emptySpace, offset, origOffset);
-			}
-		}
-	}
-
-	/**
-	 * Nearly same as method from above ^
-	 * 
-	 * @param emptySpace The empty cell which is currently being checked
-	 * @param offset This is the offset + the original offset so we can see if there are multiple
-	 * 	pieces in a row
-	 * @param origOffset This is the original offset, the reason this is passed is because the offset
-	 *  is added to and the method needs to remember what the offset was before adding anything.
-	 */
-	
-//	private static void checkEmptySpacesForOpponent(int emptySpace, int offset, int origOffset, int piecesJumped) {
-//		if (myPieceIds.contains(emptySpace + offset)) {
+//	private static void checkEmptySpaces(int emptySpace, int offset, int origOffset) {		
+//		if (opponentPieceIds.contains(emptySpace + offset)) {
+//			
 //			offset = offset + origOffset;
 //			int addedOffset = emptySpace + offset;
-//			if (opponentPieceIds.contains(addedOffset) && !myPieceIds.contains(addedOffset)) {
-//				if (gameBoard[addedOffset] != 2) {
-//					MoveReturnCode validMove = new MoveReturnCode(addedOffset, emptySpace, origOffset);
-//					validMoves.add(validMove);
-//					numOfPiecesJumped.add(piecesJumped + 1);
-//					finalCellsList.add(emptySpace);
-//				}
+//			
+//			if (!opponentPieceIds.contains(addedOffset) && myPieceIds.contains(addedOffset)) {
+//				piecesToFlip.add(addedOffset);
+//				addMoveReturnCodeToList(offset, addedOffset, emptySpace, origOffset);
+//				
 //			}
-//			piecesJumped++;
-//			checkEmptySpacesForOpponent(emptySpace, offset, origOffset, piecesJumped);
+//			checkEmptySpaces(emptySpace, offset, origOffset);
 //		}
+//	}
+
+//	private static boolean validMoveFound = false;
+	
+//	private static MoveReturnCode checkEmptySpaces(int emptySpace, int offset, int origOffset) {
+//		if (opponentPieceIds.contains(emptySpace + offset)) {
+//			
+//			ArrayList<Integer> piecesToFlip = new ArrayList<Integer>();
+//			int newOffset = offset + origOffset;
+//			int addedOffset = emptySpace + newOffset;
+//			
+//			if (!opponentPieceIds.contains(addedOffset) && myPieceIds.contains(addedOffset)) {
+//				if (gameBoard[addedOffset] != 2) {
+//					
+//					while (newOffset > origOffset || newOffset < origOffset) {	
+//						piecesToFlip.add(emptySpace + newOffset - origOffset);
+//						newOffset -= origOffset;
+//					}					
+//					if (newOffset == origOffset) {
+//						piecesToFlip.add(emptySpace + newOffset - origOffset);
+//					}
+//					
+//					MoveReturnCode validMove = new MoveReturnCode(addedOffset, emptySpace, origOffset, piecesToFlip);
+//
+//					return validMove;
+//				}			
+//			}
+//			checkEmptySpaces(emptySpace, newOffset, origOffset);
+//		}
+//		return null;
+//	}
+
+	private static void checkEmptySpaces(int emptySpace, int offset, int origOffset) {
+		if (opponentPieceIds.contains(emptySpace + offset)) {
+			
+			ArrayList<Integer> piecesToFlip = new ArrayList<Integer>();
+			int newOffset = offset + origOffset;
+			int addedOffset = emptySpace + newOffset;
+			
+			if (!opponentPieceIds.contains(addedOffset) && myPieceIds.contains(addedOffset)) {
+				if (gameBoard[addedOffset] != 2) {
+					
+					while (newOffset > origOffset || newOffset < origOffset) {	
+						piecesToFlip.add(emptySpace + newOffset - origOffset);
+						newOffset -= origOffset;
+					}					
+					if (newOffset == origOffset) {
+						piecesToFlip.add(emptySpace + newOffset - origOffset);
+					}
+					
+					MoveReturnCode validMove = new MoveReturnCode(addedOffset, emptySpace, origOffset, piecesToFlip);
+					validMoves.add(validMove);
+				}			
+			}
+			checkEmptySpaces(emptySpace, addedOffset, origOffset);
+		}
+	}
+	
+	private static MoveReturnCode checkEmptySpacesForOpponent(int emptySpace, int offset, int origOffset) {
+		if (myPieceIds.contains(emptySpace + offset)) {
+
+			ArrayList<Integer> piecesToFlip = new ArrayList<Integer>();
+			int newOffset = offset + origOffset;
+			int addedOffset = emptySpace + newOffset;
+			
+			// If the player's piece exists there and its not one of the programs we found a valid move
+			//  otherwise keep going
+			if (opponentPieceIds.contains(addedOffset) && !myPieceIds.contains(addedOffset)) {
+				if (gameBoard[addedOffset] != 2) {
+					
+					while (newOffset > origOffset || newOffset < origOffset) {	
+						piecesToFlip.add(emptySpace + newOffset - origOffset);
+						newOffset -= origOffset;
+					}					
+					
+					if (newOffset == origOffset) {
+						piecesToFlip.add(emptySpace + newOffset - origOffset);
+					}
+					
+					//Build a MoveReturnCode to return.
+					MoveReturnCode validMove = new MoveReturnCode(addedOffset, emptySpace, origOffset, piecesToFlip);
+
+					return validMove; // ayy we found a valid move
+				}
+			}
+			// This could be a valid move, lets keep going in that direction
+			checkEmptySpacesForOpponent(emptySpace, newOffset, origOffset);  
+		}
+		return null; // wasn't a valid move so we don't care
+	}
+	
+	/**
+	 * This method purely exists to reduce the amount of duplicated code within the
+	 *  checkEmptySpaces methods. However now looking at this, it takes up more space than if 
+	 *  the code was part of each respective method.
+	 * 
+	 * @param offset This is an incremented value of the offset, it has the origOffset added to it with
+	 * 	each iteration of the method
+	 * @param addedOffset This is the value of a piece that can be flipped
+	 * @param emptySpace This is the value of the final cell, being the empty space
+	 * @param origOffset The value of the original offset, this remains untouched to preserve its value.
+	 */
+	
+//	private static void addMoveReturnCodeToList (int offset, int addedOffset, int emptySpace, int origOffset) {
+//		if (gameBoard[addedOffset] != 2) {
+//			
+//			MoveReturnCode validMove = new MoveReturnCode(addedOffset, emptySpace, origOffset, piecesToFlip);
+//			validMoves.add(validMove);
+////			piecesToFlip.clear();
+//		}
+////		piecesToFlip.add(emptySpace);
+////		System.out.println("piecesToFlip.add(" + addedOffset + ")");	
 //	}
 	
 	/**
@@ -373,21 +375,28 @@ public class gameBoard {
 		 *  iterating multiple times if need be.
 		 */
 		
-//		if (myTurn) {
+		if (myTurn) {
 			for (int i = 0; i < emptySpaces.size(); i++) {
 				for (int j = 0; j < offsets.length; j++) {
+//					MoveReturnCode returnedValue = checkEmptySpaces(emptySpaces.get(i), offsets[j], offsets[j]);
+//
+//					if (returnedValue != null) { 
+//						validMoves.add(returnedValue);
+//					}
 					checkEmptySpaces(emptySpaces.get(i), offsets[j], offsets[j]);
-					piecesToFlip.clear();
 				}
 			}
-//		} else {
-//			for (int i = 0; i < emptySpaces.size(); i++) {
-//				for (int j = 0; j < offsets.length; j++) {
-//					checkEmptySpacesForOpponent(emptySpaces.get(i), offsets[j], offsets[j], 0);
-//					piecesToFlip.clear();
-//				}
-//			}
-//		}
+		} else {
+			for (int i = 0; i < emptySpaces.size(); i++) {
+				for (int j = 0; j < offsets.length; j++) {
+					MoveReturnCode returnedValue = checkEmptySpacesForOpponent(emptySpaces.get(i), offsets[j], offsets[j]);
+
+					if (returnedValue != null) { 
+						validMoves.add(returnedValue);
+					}
+				}
+			}
+		}
 	}
 
 	/**
@@ -396,6 +405,7 @@ public class gameBoard {
 	 *  and depending on who is playing as who and puts the piece into the
 	 *  respective arrayList. If the piece doesn't meet the criteria, it means
 	 *  its an empty space.
+	 *  
 	 * 
 	 * And just to make sure it doesn't add border pieces as empty spaces it only
 	 *  runs the actual size of the playing field being between 11 and 88
@@ -404,7 +414,7 @@ public class gameBoard {
 	 *  called by validMoveMaster and we don't really care what the moves are for
 	 *  old boards
 	 *  
-	 *  HOWEVER, it is ENTIRELY USELESS to add to the black and white piece id 
+	 *  HOWEVER, it is / might be ENTIRELY USELESS to add to the black and white piece id 
 	 *  lists if it's not end game
 	 */
 	
@@ -416,8 +426,8 @@ public class gameBoard {
 		emptySpaces.clear();
 		blackPieceIds.clear();
 		whitePieceIds.clear();
-		numOfPiecesJumped.clear();
-		finalCellsList.clear();
+//		numOfPiecesJumped.clear();
+//		finalCellsList.clear();
 		
 		for (int i = 11; i <= 88; i++) {
 			if (myColor == 1 && gameBoard[i] == 1) {
@@ -451,22 +461,32 @@ public class gameBoard {
 	public static void printValidMoves(int myColor) {
 		
 		if (printMode == 2 || printMode == 3) {
-			for(int i = 0; i < validMoves.size(); i++) {
+			for (int i = 0; i < validMoves.size(); i++) {
 				MoveReturnCode temp = validMoves.get(i);
 			
 				int initialCell = temp.getInitialCell();
 				int finalCell = temp.getFinalCell();
+				ArrayList<Integer> flips = temp.getFlips();
 				
+				String flipsList = "";
+				
+				for (int j = 0; j < flips.size(); j++) {
+					if (j + 1 != flips.size()) {
+						flipsList += "(" + integerToRowColumn(flips.get(j)) + "), ";
+					} else {
+						flipsList += "(" + integerToRowColumn(flips.get(j)) + ")";
+					}
+				}
 				if (myColor == 1) {
 					System.out.println("C Black : ("
 							+ integerToRowColumn(initialCell)
 							+ ") to (" + integerToRowColumn(finalCell)
-							+ ") : Flipable disks : " + numOfPiecesJumped.get(i));
+							+ ") : Flipable disks : " + flipsList);
 				} else {
 					System.out.println("C White : (" 
 							+ integerToRowColumn(initialCell)
 							+ ") to (" + integerToRowColumn(finalCell)
-							+ ") : Flipable Disks : " + numOfPiecesJumped.get(i));
+							+ ") : Flipable Disks : " + flipsList);
 				}
 			}
 		}
@@ -621,7 +641,7 @@ public class gameBoard {
 					}
 				}
 			}
-			if (receivedValidMove == false) {
+			if (!receivedValidMove) {
 				System.out.println("C Not a valid move!");
 			}
 		} else {
@@ -659,158 +679,161 @@ public class gameBoard {
 	 *  for a single move. It only checks to see which move has the greatest number
 	 *  of pieces to flip
 	 *  
+	 *  Tis' but a flesh wound.
+	 *  
+	 *  
 	 * @return The value returned is the id of the cell from the validMoveList which
 	 * 	has the maximum number of pieces that intend to be flipped
 	 */
 	
-	private static int simpleMaxStrat() { // Simple Maximum Disk Strategy
-		
-		/*
-		 * ONLY TAKES INTO ACCOUNT OF HOW MANY PIECES ARE GAINED FROM A SINGLE 
-		 *  MOVE, MEAINING IF THERE ARE MULTIPLE OPTIONS FOR A SPACE, THIS 
-		 *  WILL  N O T  TAKE THAT INTO ACCOUNT.
-		 *  
-		 *  AFAIK the current implementation on checking to see if a move shares
-		 *   multiple options is doing it on the fly, rather than as a proper 
-		 *   method 
-		 */
-		
-		int nextMove = 0;
-		int maxDisksGained = 0;
-		
-		ArrayList<Integer> sameNumOfGainableDisks = new ArrayList<Integer>();
-		
-		// find the maximum number of disks gained through all the possible moves
-		for (int i = 0; i < numOfPiecesJumped.size(); i++) {
-			nextMove = numOfPiecesJumped.get(i);
-			if (nextMove >= maxDisksGained) {
-				maxDisksGained = nextMove;
-			}
-		}
-		
-		//Take the maxDisksGained and find out which moves have the same value as maxDisksGained and add that to a list
-		for (int i = 0; i < numOfPiecesJumped.size(); i++) {
-			if (numOfPiecesJumped.get(i) == maxDisksGained) {
-				sameNumOfGainableDisks.add(i);
-			}
-		}
-		
-		//Then pick a random cell from sameNumOfGainableDisks and add that to the board
-		Random rand = new Random();
-		int num = rand.nextInt(sameNumOfGainableDisks.size());
-			
-		int aMove = sameNumOfGainableDisks.get(num);
-			
-		return aMove;
-	}
+//	private static int simpleMaxStrat() { // Simple Maximum Disk Strategy
+//		
+//		/*
+//		 * ONLY TAKES INTO ACCOUNT OF HOW MANY PIECES ARE GAINED FROM A SINGLE 
+//		 *  MOVE, MEAINING IF THERE ARE MULTIPLE OPTIONS FOR A SPACE, THIS 
+//		 *  WILL  N O T  TAKE THAT INTO ACCOUNT.
+//		 *  
+//		 *  AFAIK the current implementation on checking to see if a move shares
+//		 *   multiple options is doing it on the fly, rather than as a proper 
+//		 *   method 
+//		 */
+//		
+//		int nextMove = 0;
+//		int maxDisksGained = 0;
+//		
+//		ArrayList<Integer> sameNumOfGainableDisks = new ArrayList<Integer>();
+//		
+//		// find the maximum number of disks gained through all the possible moves
+//		for (int i = 0; i < numOfPiecesJumped.size(); i++) {
+//			nextMove = numOfPiecesJumped.get(i);
+//			if (nextMove >= maxDisksGained) {
+//				maxDisksGained = nextMove;
+//			}
+//		}
+//		
+//		//Take the maxDisksGained and find out which moves have the same value as maxDisksGained and add that to a list
+//		for (int i = 0; i < numOfPiecesJumped.size(); i++) {
+//			if (numOfPiecesJumped.get(i) == maxDisksGained) {
+//				sameNumOfGainableDisks.add(i);
+//			}
+//		}
+//		
+//		//Then pick a random cell from sameNumOfGainableDisks and add that to the board
+//		Random rand = new Random();
+//		int num = rand.nextInt(sameNumOfGainableDisks.size());
+//			
+//		int aMove = sameNumOfGainableDisks.get(num);
+//			
+//		return aMove;
+//	}
 	
-	private static int complexMaxStrat() { // Complex Maximum Disk Strategy
-		
-		int maxDisksJumped = 0;
-		
-		ArrayList<Integer> sameNumOfGainableDisks = new ArrayList<Integer>();
-		ArrayList<Integer> duplicateFinder = new ArrayList<Integer>();
-		
-		/**
-		 * This loop finds the maximum number of disks gained through complex moves
-		 *  Complex moves are moves that have multiple possible moves to a single spot. This comes up with 
-		 *  a single value of the maximum number of pieces jumped.
-		 */
-		
-		for (int i = 0; i < numOfPiecesJumped.size(); i++) {
-			// This will set the first value it gets as the max because the disks gained is always 1 or more
-			int disksJumped = numOfPiecesJumped.get(i);
-			// should always be true for the first value
-		
-			
-			for (int j = 0; j < finalCellsList.size(); j++) {
-				if (finalCellsList.get(i) == finalCellsList.get(j)) {
-					if (j != i) { // we don't want the comparison cell to be added to itself
-						disksJumped += numOfPiecesJumped.get(j);
-					}
-				}
-			}
-			
-			if (disksJumped > maxDisksJumped) {	
-				maxDisksJumped = disksJumped;
-				System.out.println("maxDisksJumped : " + maxDisksJumped);
-			}
-		}
-		
-		/**
-		 * This loop goes through all of the available complex moves with how many disks they gain to try and find
-		 *  values that are equal to the maximum number of disks gained. It then adds these moves to a list.
-		 */
-		
-		for (int i = 0; i < numOfPiecesJumped.size(); i++) {
-			int addedValues = 0;
-			
-			for (int j = 0; j < numOfPiecesJumped.size(); j++) {
-				if (finalCellsList.get(i) == finalCellsList.get(j)) {
-					if (j != i) { // We don't want to add the cell to itself
-						addedValues += numOfPiecesJumped.get(i);
-					}
-				}
-			}
-			
-			/** 
-			 * Hey if the value is the same as the max add it, except if its already there, burn it, 
-			 * we don't want false justifications for how many moves there really are.
-			 */
-			
-			if ((addedValues + 1) == maxDisksJumped) {
-				if (!duplicateFinder.contains(finalCellsList.get(i))) {
-					System.out.println("C Adding value : " + i );
-					sameNumOfGainableDisks.add(i);
-					duplicateFinder.add(finalCellsList.get(i));
-				} else { // Found a duplicate, don't add it to the list.
-					System.out.println("C Skipping value : " + i );
-				}
-			}
-		}
-		
-		/**
-		 * A final for loop to add any simple max disk moves that might be lying around to the list of maximum
-		 * moves possible
-		 */
-		
-		for (int i = 0; i < numOfPiecesJumped.size(); i++) {
-			if (numOfPiecesJumped.get(i) == maxDisksJumped) {
-				sameNumOfGainableDisks.add(i);
-			}
-		}
-
-		/**
-		 * Lastly pick a random cell from sameNumOfGainableDisks and return that move
-		 * 
-		 * There should  A L W A Y S  be at least  O N E  value in the sameNumOfGainableDisks
-		 *  list, otherwise this  W I L L  die, crash, and burn killing itself along with the other
-		 *  methods and thousands of print statements. We don't want that now do we?
-		 * 
-		 *  ... unless there's no moves, then it dies rather easily.
-		 *  
-		 *  Including a fail safe for this statement will cover up any bugs and it would only rely on the first
-		 *   move rather than picking one at random. So it is out of the best interest to not include one even 
-		 *   though this is likely to be going against standard coding conventions. Thats the way it has to be.
-		 *   
-		 *   Like how Edna Mode never said, NO FAILSAFES!
-		 */
-		
-		int aMove = -1;
-		
-		// if this statement can't come up with a random number, its taking the whole program with it
-		if (sameNumOfGainableDisks.size() != 0) { 
-			Random rand = new Random();
-			int num = rand.nextInt(sameNumOfGainableDisks.size());
-			aMove = sameNumOfGainableDisks.get(num);
-		} else {
-			// if true, die.
-//			System.out.println("C ERROR : Unable to find a move with " + maxDisksJumped + " disks jumped.");
-			System.out.println("C Uhhhh... haha... that wasn't supposed to happen... thats it for me folks.");
-		}
-		
-		return aMove;
-	}
+//	private static int complexMaxStrat() { // Complex Maximum Disk Strategy
+//		
+//		int maxDisksJumped = 0;
+//		
+//		ArrayList<Integer> sameNumOfGainableDisks = new ArrayList<Integer>();
+//		ArrayList<Integer> duplicateFinder = new ArrayList<Integer>();
+//		
+//		/**
+//		 * This loop finds the maximum number of disks gained through complex moves
+//		 *  Complex moves are moves that have multiple possible moves to a single spot. This comes up with 
+//		 *  a single value of the maximum number of pieces jumped.
+//		 */
+//		
+//		for (int i = 0; i < numOfPiecesJumped.size(); i++) {
+//			// This will set the first value it gets as the max because the disks gained is always 1 or more
+//			int disksJumped = numOfPiecesJumped.get(i);
+//			// should always be true for the first value
+//		
+//			
+//			for (int j = 0; j < finalCellsList.size(); j++) {
+//				if (finalCellsList.get(i) == finalCellsList.get(j)) {
+//					if (j != i) { // we don't want the comparison cell to be added to itself
+//						disksJumped += numOfPiecesJumped.get(j);
+//					}
+//				}
+//			}
+//			
+//			if (disksJumped > maxDisksJumped) {	
+//				maxDisksJumped = disksJumped;
+//				System.out.println("maxDisksJumped : " + maxDisksJumped);
+//			}
+//		}
+//		
+//		/**
+//		 * This loop goes through all of the available complex moves with how many disks they gain to try and find
+//		 *  values that are equal to the maximum number of disks gained. It then adds these moves to a list.
+//		 */
+//		
+//		for (int i = 0; i < numOfPiecesJumped.size(); i++) {
+//			int addedValues = 0;
+//			
+//			for (int j = 0; j < numOfPiecesJumped.size(); j++) {
+//				if (finalCellsList.get(i) == finalCellsList.get(j)) {
+//					if (j != i) { // We don't want to add the cell to itself
+//						addedValues += numOfPiecesJumped.get(i);
+//					}
+//				}
+//			}
+//			
+//			/** 
+//			 * Hey if the value is the same as the max add it, except if its already there, burn it, 
+//			 * we don't want false justifications for how many moves there really are.
+//			 */
+//			
+//			if ((addedValues + 1) == maxDisksJumped) {
+//				if (!duplicateFinder.contains(finalCellsList.get(i))) {
+//					System.out.println("C Adding value : " + i );
+//					sameNumOfGainableDisks.add(i);
+//					duplicateFinder.add(finalCellsList.get(i));
+//				} else { // Found a duplicate, don't add it to the list.
+//					System.out.println("C Skipping value : " + i );
+//				}
+//			}
+//		}
+//		
+//		/**
+//		 * A final for loop to add any simple max disk moves that might be lying around to the list of maximum
+//		 * moves possible
+//		 */
+//		
+//		for (int i = 0; i < numOfPiecesJumped.size(); i++) {
+//			if (numOfPiecesJumped.get(i) == maxDisksJumped) {
+//				sameNumOfGainableDisks.add(i);
+//			}
+//		}
+//
+//		/**
+//		 * Lastly pick a random cell from sameNumOfGainableDisks and return that move
+//		 * 
+//		 * There should  A L W A Y S  be at least  O N E  value in the sameNumOfGainableDisks
+//		 *  list, otherwise this  W I L L  die, crash, and burn killing itself along with the other
+//		 *  methods and thousands of print statements. We don't want that now do we?
+//		 * 
+//		 *  ... unless there's no moves, then it dies rather easily.
+//		 *  
+//		 *  Including a fail safe for this statement will cover up any bugs and it would only rely on the first
+//		 *   move rather than picking one at random. So it is out of the best interest to not include one even 
+//		 *   though this is likely to be going against standard coding conventions. Thats the way it has to be.
+//		 *   
+//		 *   Like how Edna Mode never said, NO FAILSAFES!
+//		 */
+//		
+//		int aMove = -1;
+//		
+//		// if this statement can't come up with a random number, its taking the whole program with it
+//		if (sameNumOfGainableDisks.size() != 0) { 
+//			Random rand = new Random();
+//			int num = rand.nextInt(sameNumOfGainableDisks.size());
+//			aMove = sameNumOfGainableDisks.get(num);
+//		} else {
+//			// if true, die.
+////			System.out.println("C ERROR : Unable to find a move with " + maxDisksJumped + " disks jumped.");
+//			System.out.println("C Uhhhh... haha... that wasn't supposed to happen... thats it for me folks.");
+//		}
+//		
+//		return aMove;
+//	}
 	
 	
 	/**
@@ -822,13 +845,13 @@ public class gameBoard {
 	public static void userInput() {
 		Scanner scan = new Scanner(System.in);
 		
-		while (choseColors == false) {
+		while (!choseColors) {
 			System.out.println("C Enter StartColor: ");
 			String enteredValue = scan.nextLine();
+//			String enteredValue = "I B";
 			if (enteredValue.contentEquals("I W")) {
 				myColor *= -1;
 				choseColors = true;
-				myTurn = !myTurn;
 				System.out.println("C Playing as \"I W\"\nR W");
 			} else if (enteredValue.contentEquals("I B")) {
 				opponentColor *= -1;
@@ -846,14 +869,14 @@ public class gameBoard {
 		//  don't know where to put this print statement so it only does an initial print
 		//  once players choose their colors
 		
-		if (printedBoard == false) {
+		if (!printedBoard) {
 			
 			printBoard();
 			
 			printedBoard = true;
 		}
 
-		if (choseColors == true && gameOver != true) {
+		if (choseColors && !gameOver) {
 			if (myTurn) {
 				
 				System.out.println("C The program thinks confidently...");
@@ -880,10 +903,12 @@ public class gameBoard {
 							temp = validMoves.get(randy);
 							break;
 						case 2 :
-							temp = validMoves.get(simpleMaxStrat());
+//							temp = validMoves.get(simpleMaxStrat());
+							System.out.println("This strategy is broken, using default.");
 							break;
 						case 3 :
-							temp = validMoves.get(complexMaxStrat());
+							System.out.println("This strategy is broken, using default.");
+//							temp = validMoves.get(complexMaxStrat());
 							break;
 						case 4 :  
 							System.out.println("This strategy is not currently implemented yet, using default.");
@@ -969,21 +994,21 @@ public class gameBoard {
 				// state that the program logic is finished and change who's move it is
 				System.out.println("C The program has made their move.");
 
-				// state what move number it is and after that, increment the counter
-				System.out.println("C Move #" + counter);
-				counter++;
+				// state what move number it is and after that, increment the moveCounter
+				System.out.println("C Move #" + moveCounter);
+				moveCounter++;
 				
 				myTurn = !myTurn;
 				
 			}
-			if (!myTurn && gameOver != true) {
+			if (!myTurn && !gameOver) {
 				System.out.println("C The opponent should think about their options...");
 				
 				validMoveMaster();
 
 				printValidMoves(opponentColor);
 				
-				while (receivedValidMove == false) {
+				while (!receivedValidMove) {
 
 					System.out.println("C Enter a Move:");
 					String enteredValue = scan.nextLine();
@@ -1016,14 +1041,14 @@ public class gameBoard {
 						}
 					}
 
-					if (receivedValidMove == true) {
+					if (receivedValidMove) {
 						myTurn = !myTurn;
 						receivedValidMove = false;
 						System.out.println("C Recieved : " + enteredValue);
 						printBoard();
 						System.out.println("C The opponent finally finished making up their mind.");
-						System.out.println("C Move #" + counter);
-						counter++;
+						System.out.println("C Move #" + moveCounter);
+						moveCounter++;
 						break;
 					}
 				}

@@ -7,7 +7,7 @@ public class MoveReturnCode {
 	private int initialCell;
 	private int finalCell;
 	private int origOffset;
-	private static ArrayList<Integer> flips;
+	private ArrayList<Integer> flips;
 	/**
 	 * This is what each move is stored as so it can be returned across multiple methods.
 	 * 
@@ -17,7 +17,7 @@ public class MoveReturnCode {
 	 * @param flips This is an array list of the flips that each move makes
 	 */
 	
-	public MoveReturnCode(int initialCell, int finalCell, int origOffset, ArrayList flips) {
+	public MoveReturnCode(int initialCell, int finalCell, int origOffset, ArrayList<Integer> flips) {
 		this.initialCell = initialCell;
 		this.finalCell = finalCell;
 		this.origOffset = origOffset;
@@ -37,7 +37,7 @@ public class MoveReturnCode {
 		return origOffset;
 	}
 	
-	public ArrayList getFlips() {
+	public ArrayList<Integer> getFlips() {
 		return flips;
 	}
 
