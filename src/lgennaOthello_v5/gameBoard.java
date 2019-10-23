@@ -43,29 +43,29 @@ public class gameBoard {
 	 */
 
 
-//		A Clean Board			    a   b   c   d   e   f   g   h
-	static int[] gameBoard =  { 2,  2,  2,  2,  2,  2,  2,  2,  2,  2, 
-								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 1
-		   						2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 2
-	   							2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 3
-	   							2,  0,  0,  0, -1,  1,  0,  0,  0,  2,  // 4
-	   							2,  0,  0,  0,  1, -1,  0,  0,  0,  2,  // 5
-	   							2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 6
-	   							2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 7
-			   					2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 8
-			   					2,  2,  2,  2,  2,  2,  2,  2,  2,  2 };
-
 ////		A Clean Board			    a   b   c   d   e   f   g   h
 //	static int[] gameBoard =  { 2,  2,  2,  2,  2,  2,  2,  2,  2,  2, 
 //								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 1
-//								2,  0, -1,  1,  1,  1,  1,  0,  0,  2,  // 2
-//								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 3
-//								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 4
-//								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 5
-//								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 6
-//								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 7
-//								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 8
-//								2,  2,  2,  2,  2,  2,  2,  2,  2,  2 };
+//		   						2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 2
+//	   							2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 3
+//	   							2,  0,  0,  0, -1,  1,  0,  0,  0,  2,  // 4
+//	   							2,  0,  0,  0,  1, -1,  0,  0,  0,  2,  // 5
+//	   							2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 6
+//	   							2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 7
+//			   					2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 8
+//			   					2,  2,  2,  2,  2,  2,  2,  2,  2,  2 };
+
+//		A Clean Board			    a   b   c   d   e   f   g   h
+	static int[] gameBoard =  { 2,  2,  2,  2,  2,  2,  2,  2,  2,  2, 
+								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 1
+								2,  0, -1, -1, -1, -1,  1,  0,  0,  2,  // 2
+								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 3
+								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 4
+								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 5
+								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 6
+								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 7
+								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 8
+								2,  2,  2,  2,  2,  2,  2,  2,  2,  2 };
 	
 ////A game breaking board	    		a   b   c   d   e   f   g   h
 //	static int[] gameBoard =  { 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,
@@ -300,7 +300,7 @@ public class gameBoard {
 		}
 	}
 	
-	private static MoveReturnCode checkEmptySpacesForOpponent(int emptySpace, int offset, int origOffset) {
+	private static void checkEmptySpacesForOpponent(int emptySpace, int offset, int origOffset) {
 		if (myPieceIds.contains(emptySpace + offset)) {
 
 			ArrayList<Integer> piecesToFlip = new ArrayList<Integer>();
@@ -323,14 +323,12 @@ public class gameBoard {
 					
 					//Build a MoveReturnCode to return.
 					MoveReturnCode validMove = new MoveReturnCode(addedOffset, emptySpace, origOffset, piecesToFlip);
-
-					return validMove; // ayy we found a valid move
+					validMoves.add(validMove);
 				}
 			}
 			// This could be a valid move, lets keep going in that direction
 			checkEmptySpacesForOpponent(emptySpace, newOffset, origOffset);  
 		}
-		return null; // wasn't a valid move so we don't care
 	}
 	
 	/**
@@ -389,11 +387,12 @@ public class gameBoard {
 		} else {
 			for (int i = 0; i < emptySpaces.size(); i++) {
 				for (int j = 0; j < offsets.length; j++) {
-					MoveReturnCode returnedValue = checkEmptySpacesForOpponent(emptySpaces.get(i), offsets[j], offsets[j]);
-
-					if (returnedValue != null) { 
-						validMoves.add(returnedValue);
-					}
+//					MoveReturnCode returnedValue = checkEmptySpacesForOpponent(emptySpaces.get(i), offsets[j], offsets[j]);
+//
+//					if (returnedValue != null) { 
+//						validMoves.add(returnedValue);
+//					}
+					checkEmptySpacesForOpponent(emptySpaces.get(i), offsets[j], offsets[j]);
 				}
 			}
 		}
