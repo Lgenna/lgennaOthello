@@ -43,29 +43,29 @@ public class gameBoard {
 	 */
 
 
-////		A Clean Board			    a   b   c   d   e   f   g   h
-//	static int[] gameBoard =  { 2,  2,  2,  2,  2,  2,  2,  2,  2,  2, 
-//								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 1
-//		   						2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 2
-//	   							2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 3
-//	   							2,  0,  0,  0, -1,  1,  0,  0,  0,  2,  // 4
-//	   							2,  0,  0,  0,  1, -1,  0,  0,  0,  2,  // 5
-//	   							2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 6
-//	   							2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 7
-//			   					2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 8
-//			   					2,  2,  2,  2,  2,  2,  2,  2,  2,  2 };
-
-//		A Clean Board			    a   b   c   d   e   f   g   h
+//		A clean board			    a   b   c   d   e   f   g   h
 	static int[] gameBoard =  { 2,  2,  2,  2,  2,  2,  2,  2,  2,  2, 
 								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 1
-								2,  0, -1, -1, -1, -1,  1,  0,  0,  2,  // 2
-								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 3
-								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 4
-								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 5
-								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 6
-								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 7
-								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 8
-								2,  2,  2,  2,  2,  2,  2,  2,  2,  2 };
+		   						2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 2
+	   							2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 3
+	   							2,  0,  0,  0, -1,  1,  0,  0,  0,  2,  // 4
+	   							2,  0,  0,  0,  1, -1,  0,  0,  0,  2,  // 5
+	   							2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 6
+	   							2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 7
+			   					2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 8
+			   					2,  2,  2,  2,  2,  2,  2,  2,  2,  2 };
+
+////		A testing board			    a   b   c   d   e   f   g   h
+//	static int[] gameBoard =  { 2,  2,  2,  2,  2,  2,  2,  2,  2,  2, 
+//								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 1
+//								2,  0, -1, -1, -1, -1,  1,  0,  0,  2,  // 2
+//								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 3
+//								2,  0,  0, -1, -1, -1,  1,  0,  0,  2,  // 4
+//								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 5
+//								2,  0,  0,  0, -1, -1,  1,  0,  0,  2,  // 6
+//								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 7
+//								2,  0,  0,  0,  0, -1,  1,  0,  0,  2,  // 8
+//								2,  2,  2,  2,  2,  2,  2,  2,  2,  2 };
 	
 ////A game breaking board	    		a   b   c   d   e   f   g   h
 //	static int[] gameBoard =  { 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,
@@ -188,19 +188,25 @@ public class gameBoard {
 					} else if (counter == 8) {
 						if (gameBoard[i] == 1) {
 							System.out.print("B *\n");
+//							System.out.print(" B *\n");
 						} else if (gameBoard[i] == -1)
 							System.out.print("W *\n");
+//							System.out.print(" W *\n");
 						else {
 							System.out.print("- *\n");
+//							System.out.print( i + " *\n");
 						}
 						counter = 0;
 					} else if (gameBoard[i] != 2) {
 						if (gameBoard[i] == 1) {
 							System.out.print("B ");
+//							System.out.print(" B ");
 						} else if (gameBoard[i] == -1)
 							System.out.print("W ");
+//							System.out.print(" W ");
 						else {
 							System.out.print("- ");
+//							System.out.print(i + " ");
 						}
 						counter++;
 					}
@@ -229,20 +235,7 @@ public class gameBoard {
 	 *  is added to and the method needs to remember what the offset was before adding anything.
 	 */
 	
-//	private static void checkEmptySpaces(int emptySpace, int offset, int origOffset) {		
-//		if (opponentPieceIds.contains(emptySpace + offset)) {
-//			
-//			offset = offset + origOffset;
-//			int addedOffset = emptySpace + offset;
-//			
-//			if (!opponentPieceIds.contains(addedOffset) && myPieceIds.contains(addedOffset)) {
-//				piecesToFlip.add(addedOffset);
-//				addMoveReturnCodeToList(offset, addedOffset, emptySpace, origOffset);
-//				
-//			}
-//			checkEmptySpaces(emptySpace, offset, origOffset);
-//		}
-//	}
+
 
 //	private static boolean validMoveFound = false;
 	
@@ -274,66 +267,91 @@ public class gameBoard {
 //		return null;
 //	}
 
-	private static void checkEmptySpaces(int emptySpace, int offset, int origOffset) {
+//	private static void origCheckEmptySpaces(int emptySpace, int offset, int origOffset) {		
+//		if (opponentPieceIds.contains(emptySpace + offset)) {
+//			offset = offset + origOffset;
+//			int addedOffset = emptySpace + offset;
+//			if (!opponentPieceIds.contains(addedOffset) && myPieceIds.contains(addedOffset)) {
+//				if (gameBoard[addedOffset] != 2) {
+//					
+//					MoveReturnCode validMove = new MoveReturnCode(addedOffset, emptySpace, origOffset, null);
+//					validMoves.add(validMove);
+//				}
+//			}
+//			origCheckEmptySpaces(emptySpace, offset, origOffset);
+//		}
+//	}
+
+	/**
+	 * WORKING AS OF OCTOBER 23, 2019 12:08 PM
+	 */
+	
+//	private static void checkEmptySpaces(int emptySpace, int offset, int origOffset) {
+//		if (opponentPieceIds.contains(emptySpace + offset)) {
+//			
+//			ArrayList<Integer> piecesToFlip = new ArrayList<Integer>();
+//			offset = offset + origOffset;
+//			int addedOffset = emptySpace + offset;
+//			
+//			if (!opponentPieceIds.contains(addedOffset) && myPieceIds.contains(addedOffset)) {
+//				if (gameBoard[addedOffset] != 2) {
+//					
+//					int piecesOffset = offset;
+//					
+//					if (piecesOffset > origOffset) {
+//						while (piecesOffset > origOffset) {	
+//							piecesToFlip.add(emptySpace + piecesOffset - origOffset);
+//							piecesOffset -= origOffset;
+//						}
+//					} else if (piecesOffset < origOffset) {
+//						while (piecesOffset < origOffset) {
+//							piecesToFlip.add(emptySpace + piecesOffset - origOffset);
+//							piecesOffset -= origOffset;
+//						}
+//					} 
+//					if (piecesOffset == origOffset) {
+//						piecesToFlip.add(emptySpace + piecesOffset - origOffset);
+//					}
+//					
+//					MoveReturnCode validMove = new MoveReturnCode(addedOffset, emptySpace, origOffset, piecesToFlip);
+//					validMoves.add(validMove);
+//				}			
+//			}
+//			checkEmptySpaces(emptySpace, offset, origOffset);
+//		}
+//	}
+	
+	private static void checkEmptySpaces (int emptySpace, int offset, int origOffset) {
 		if (opponentPieceIds.contains(emptySpace + offset)) {
 			
 			ArrayList<Integer> piecesToFlip = new ArrayList<Integer>();
-			int newOffset = offset + origOffset;
-			int addedOffset = emptySpace + newOffset;
+			offset = offset + origOffset;
+			int addedOffset = emptySpace + offset;
 			
 			if (!opponentPieceIds.contains(addedOffset) && myPieceIds.contains(addedOffset)) {
-				if (gameBoard[addedOffset] != 2) {
-					
-					while (newOffset > origOffset || newOffset < origOffset) {	
-						piecesToFlip.add(emptySpace + newOffset - origOffset);
-						newOffset -= origOffset;
-					}					
-					if (newOffset == origOffset) {
-						piecesToFlip.add(emptySpace + newOffset - origOffset);
-					}
-					
-					MoveReturnCode validMove = new MoveReturnCode(addedOffset, emptySpace, origOffset, piecesToFlip);
-					validMoves.add(validMove);
-				}			
+				addMoveReturnCodeToList(offset, addedOffset, emptySpace, origOffset, piecesToFlip);
 			}
-			checkEmptySpaces(emptySpace, addedOffset, origOffset);
+			checkEmptySpaces(emptySpace, offset, origOffset);
 		}
 	}
 	
-	private static void checkEmptySpacesForOpponent(int emptySpace, int offset, int origOffset) {
+	private static void checkEmptySpacesForOpponent (int emptySpace, int offset, int origOffset) {
 		if (myPieceIds.contains(emptySpace + offset)) {
 
 			ArrayList<Integer> piecesToFlip = new ArrayList<Integer>();
-			int newOffset = offset + origOffset;
-			int addedOffset = emptySpace + newOffset;
+			offset = offset + origOffset;
+			int addedOffset = emptySpace + offset;
 			
-			// If the player's piece exists there and its not one of the programs we found a valid move
-			//  otherwise keep going
 			if (opponentPieceIds.contains(addedOffset) && !myPieceIds.contains(addedOffset)) {
-				if (gameBoard[addedOffset] != 2) {
-					
-					while (newOffset > origOffset || newOffset < origOffset) {	
-						piecesToFlip.add(emptySpace + newOffset - origOffset);
-						newOffset -= origOffset;
-					}					
-					
-					if (newOffset == origOffset) {
-						piecesToFlip.add(emptySpace + newOffset - origOffset);
-					}
-					
-					//Build a MoveReturnCode to return.
-					MoveReturnCode validMove = new MoveReturnCode(addedOffset, emptySpace, origOffset, piecesToFlip);
-					validMoves.add(validMove);
-				}
+				addMoveReturnCodeToList(offset, addedOffset, emptySpace, origOffset, piecesToFlip);
 			}
-			// This could be a valid move, lets keep going in that direction
-			checkEmptySpacesForOpponent(emptySpace, newOffset, origOffset);  
+			checkEmptySpacesForOpponent(emptySpace, offset, origOffset);  
 		}
 	}
 	
 	/**
 	 * This method purely exists to reduce the amount of duplicated code within the
-	 *  checkEmptySpaces methods. However now looking at this, it takes up more space than if 
+	 *  checkEmptySpace's methods. However now looking at this, it takes up more space than if 
 	 *  the code was part of each respective method.
 	 * 
 	 * @param offset This is an incremented value of the offset, it has the origOffset added to it with
@@ -341,18 +359,33 @@ public class gameBoard {
 	 * @param addedOffset This is the value of a piece that can be flipped
 	 * @param emptySpace This is the value of the final cell, being the empty space
 	 * @param origOffset The value of the original offset, this remains untouched to preserve its value.
+	 * @param piecesToFlip An ArrayList of each of the pieces the move will flip.
 	 */
 	
-//	private static void addMoveReturnCodeToList (int offset, int addedOffset, int emptySpace, int origOffset) {
-//		if (gameBoard[addedOffset] != 2) {
-//			
-//			MoveReturnCode validMove = new MoveReturnCode(addedOffset, emptySpace, origOffset, piecesToFlip);
-//			validMoves.add(validMove);
-////			piecesToFlip.clear();
-//		}
-////		piecesToFlip.add(emptySpace);
-////		System.out.println("piecesToFlip.add(" + addedOffset + ")");	
-//	}
+	private static void addMoveReturnCodeToList (int offset, int addedOffset, int emptySpace, int origOffset, ArrayList<Integer> piecesToFlip) {
+		if (gameBoard[addedOffset] != 2) {
+			
+			int piecesOffset = offset;
+			
+			if (piecesOffset > origOffset) {
+				while (piecesOffset > origOffset) {	
+					piecesToFlip.add(emptySpace + piecesOffset - origOffset);
+					piecesOffset -= origOffset;
+				}
+			} else if (piecesOffset < origOffset) {
+				while (piecesOffset < origOffset) {
+					piecesToFlip.add(emptySpace + piecesOffset - origOffset);
+					piecesOffset -= origOffset;
+				}
+			} 
+			if (piecesOffset == origOffset) {
+				piecesToFlip.add(emptySpace + piecesOffset - origOffset);
+			}
+			
+			MoveReturnCode validMove = new MoveReturnCode(addedOffset, emptySpace, origOffset, piecesToFlip);
+			validMoves.add(validMove);
+		}	
+	}
 	
 	/**
 	 * Why is this method called validMoveMaster? no one knows
@@ -374,24 +407,18 @@ public class gameBoard {
 		 */
 		
 		if (myTurn) {
+			System.out.println("C Using checkEmptySpaces");
 			for (int i = 0; i < emptySpaces.size(); i++) {
 				for (int j = 0; j < offsets.length; j++) {
-//					MoveReturnCode returnedValue = checkEmptySpaces(emptySpaces.get(i), offsets[j], offsets[j]);
-//
-//					if (returnedValue != null) { 
-//						validMoves.add(returnedValue);
-//					}
+
 					checkEmptySpaces(emptySpaces.get(i), offsets[j], offsets[j]);
+//					origCheckEmptySpaces(emptySpaces.get(i), offsets[j], offsets[j]);
 				}
 			}
 		} else {
+			System.out.println("C Using checkEmptySpacesForOpponent");
 			for (int i = 0; i < emptySpaces.size(); i++) {
 				for (int j = 0; j < offsets.length; j++) {
-//					MoveReturnCode returnedValue = checkEmptySpacesForOpponent(emptySpaces.get(i), offsets[j], offsets[j]);
-//
-//					if (returnedValue != null) { 
-//						validMoves.add(returnedValue);
-//					}
 					checkEmptySpacesForOpponent(emptySpaces.get(i), offsets[j], offsets[j]);
 				}
 			}
@@ -461,13 +488,14 @@ public class gameBoard {
 		
 		if (printMode == 2 || printMode == 3) {
 			for (int i = 0; i < validMoves.size(); i++) {
+				
+				String flipsList = "";
 				MoveReturnCode temp = validMoves.get(i);
 			
 				int initialCell = temp.getInitialCell();
 				int finalCell = temp.getFinalCell();
+
 				ArrayList<Integer> flips = temp.getFlips();
-				
-				String flipsList = "";
 				
 				for (int j = 0; j < flips.size(); j++) {
 					if (j + 1 != flips.size()) {
@@ -476,16 +504,42 @@ public class gameBoard {
 						flipsList += "(" + integerToRowColumn(flips.get(j)) + ")";
 					}
 				}
+				
+				/**
+				 * ♫ Everywhere I look, I see duplicate code! ♫
+				 * ♫ But don't worry... the code works. ♫ 
+				 * 
+				 * ♫ Is it efficient? ♫ 
+				 * ♫ No sir'e ♫
+				 * ♫ But does it work effectively? ♫
+				 * ♫ ~ No. (but with pizazz) ♫
+				 */
+				
 				if (myColor == 1) {
+					if (flips.size() <= 9) {
 					System.out.println("C Black : ("
 							+ integerToRowColumn(initialCell)
 							+ ") to (" + integerToRowColumn(finalCell)
-							+ ") : Flipable disks : " + flipsList);
+							+ ") : 0" + flips.size() + " Flipable disks : " + flipsList);
+					} else {
+						System.out.println("C Black : ("
+								+ integerToRowColumn(initialCell)
+								+ ") to (" + integerToRowColumn(finalCell)
+								+ ") : " + flips.size() + " Flipable disks : " + flipsList);
+					}
 				} else {
-					System.out.println("C White : (" 
-							+ integerToRowColumn(initialCell)
-							+ ") to (" + integerToRowColumn(finalCell)
-							+ ") : Flipable Disks : " + flipsList);
+					if (flips.size() <= 9) {
+						System.out.println("C White : (" 
+								+ integerToRowColumn(initialCell)
+								+ ") to (" + integerToRowColumn(finalCell)
+								+ ") : 0" + flips.size() + " Flipable Disks : " + flipsList);
+					} else {
+						System.out.println("C White : (" 
+								+ integerToRowColumn(initialCell)
+								+ ") to (" + integerToRowColumn(finalCell)
+								+ ") : " + flips.size() + " Flipable Disks : " + flipsList);
+					}
+					
 				}
 			}
 		}
