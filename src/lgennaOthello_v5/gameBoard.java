@@ -17,7 +17,7 @@ public class gameBoard {
 	private static ArrayList<Integer> blackPieceIds = new ArrayList<Integer>();
 	private static ArrayList<Integer> whitePieceIds = new ArrayList<Integer>();
 	private static ArrayList<MoveReturnCode> validMoves = new ArrayList<MoveReturnCode>();
-//	private static ArrayList<Integer> numOfPiecesJumped = new ArrayList<Integer>();
+//	private static ArrayList<Integer> numOfPiecesFlips = new ArrayList<Integer>();
 //	private static ArrayList<Integer> finalCellsList = new ArrayList<Integer>();
 	
 	
@@ -57,10 +57,10 @@ public class gameBoard {
 
 ////		A testing board			    a   b   c   d   e   f   g   h
 //	static int[] gameBoard =  { 2,  2,  2,  2,  2,  2,  2,  2,  2,  2, 
-//								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 1
-//								2,  0, -1, -1, -1, -1,  1,  0,  0,  2,  // 2
-//								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 3
-//								2,  0,  0, -1, -1, -1,  1,  0,  0,  2,  // 4
+//								2,  0,  0,  0,  1, -1, -1, -1,  0,  2,  // 1
+//								2,  0,  0, -1, -1, -1,  1,  0, -1,  2,  // 2
+//								2,  0,  0,  0,  0,  0,  0,  0,  1,  2,  // 3
+//								2,  0, -1, -1, -1, -1,  1,  0,  0,  2,  // 4
 //								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 5
 //								2,  0,  0,  0, -1, -1,  1,  0,  0,  2,  // 6
 //								2,  0,  0,  0,  0,  0,  0,  0,  0,  2,  // 7
@@ -379,7 +379,9 @@ public class gameBoard {
 				}
 			} 
 			if (piecesOffset == origOffset) {
-				piecesToFlip.add(emptySpace + piecesOffset - origOffset);
+				if (piecesToFlip.isEmpty()) {
+					piecesToFlip.add(emptySpace + piecesOffset - origOffset);
+				}
 			}
 			
 			MoveReturnCode validMove = new MoveReturnCode(addedOffset, emptySpace, origOffset, piecesToFlip);
@@ -407,7 +409,7 @@ public class gameBoard {
 		 */
 		
 		if (myTurn) {
-			System.out.println("C Using checkEmptySpaces");
+//			System.out.println("C Using checkEmptySpaces");
 			for (int i = 0; i < emptySpaces.size(); i++) {
 				for (int j = 0; j < offsets.length; j++) {
 
@@ -416,7 +418,7 @@ public class gameBoard {
 				}
 			}
 		} else {
-			System.out.println("C Using checkEmptySpacesForOpponent");
+//			System.out.println("C Using checkEmptySpacesForOpponent");
 			for (int i = 0; i < emptySpaces.size(); i++) {
 				for (int j = 0; j < offsets.length; j++) {
 					checkEmptySpacesForOpponent(emptySpaces.get(i), offsets[j], offsets[j]);
@@ -452,7 +454,7 @@ public class gameBoard {
 		emptySpaces.clear();
 		blackPieceIds.clear();
 		whitePieceIds.clear();
-//		numOfPiecesJumped.clear();
+//		numOfPiecesFlips.clear();
 //		finalCellsList.clear();
 		
 		for (int i = 11; i <= 88; i++) {
@@ -516,30 +518,15 @@ public class gameBoard {
 				 */
 				
 				if (myColor == 1) {
-					if (flips.size() <= 9) {
 					System.out.println("C Black : ("
 							+ integerToRowColumn(initialCell)
 							+ ") to (" + integerToRowColumn(finalCell)
-							+ ") : 0" + flips.size() + " Flipable disks : " + flipsList);
-					} else {
-						System.out.println("C Black : ("
-								+ integerToRowColumn(initialCell)
-								+ ") to (" + integerToRowColumn(finalCell)
-								+ ") : " + flips.size() + " Flipable disks : " + flipsList);
-					}
+							+ ") : " + flips.size() + " Flipable disks : " + flipsList);
 				} else {
-					if (flips.size() <= 9) {
-						System.out.println("C White : (" 
-								+ integerToRowColumn(initialCell)
-								+ ") to (" + integerToRowColumn(finalCell)
-								+ ") : 0" + flips.size() + " Flipable Disks : " + flipsList);
-					} else {
-						System.out.println("C White : (" 
-								+ integerToRowColumn(initialCell)
-								+ ") to (" + integerToRowColumn(finalCell)
-								+ ") : " + flips.size() + " Flipable Disks : " + flipsList);
-					}
-					
+					System.out.println("C White : (" 
+						+ integerToRowColumn(initialCell)
+						+ ") to (" + integerToRowColumn(finalCell)
+						+ ") : " + flips.size() + " Flipable Disks : " + flipsList);
 				}
 			}
 		}
@@ -732,161 +719,205 @@ public class gameBoard {
 	 *  for a single move. It only checks to see which move has the greatest number
 	 *  of pieces to flip
 	 *  
-	 *  Tis' but a flesh wound.
-	 *  
+	 *  ONLY TAKES INTO ACCOUNT OF HOW MANY PIECES ARE GAINED FROM A SINGLE 
+	 *  MOVE, MEAINING IF THERE ARE MULTIPLE OPTIONS FOR A SPACE, THIS 
+	 *  WILL  N O T  TAKE THAT INTO ACCOUNT!!!!!
 	 *  
 	 * @return The value returned is the id of the cell from the validMoveList which
 	 * 	has the maximum number of pieces that intend to be flipped
 	 */
 	
-//	private static int simpleMaxStrat() { // Simple Maximum Disk Strategy
-//		
-//		/*
-//		 * ONLY TAKES INTO ACCOUNT OF HOW MANY PIECES ARE GAINED FROM A SINGLE 
-//		 *  MOVE, MEAINING IF THERE ARE MULTIPLE OPTIONS FOR A SPACE, THIS 
-//		 *  WILL  N O T  TAKE THAT INTO ACCOUNT.
-//		 *  
-//		 *  AFAIK the current implementation on checking to see if a move shares
-//		 *   multiple options is doing it on the fly, rather than as a proper 
-//		 *   method 
-//		 */
-//		
-//		int nextMove = 0;
-//		int maxDisksGained = 0;
-//		
-//		ArrayList<Integer> sameNumOfGainableDisks = new ArrayList<Integer>();
-//		
-//		// find the maximum number of disks gained through all the possible moves
-//		for (int i = 0; i < numOfPiecesJumped.size(); i++) {
-//			nextMove = numOfPiecesJumped.get(i);
-//			if (nextMove >= maxDisksGained) {
-//				maxDisksGained = nextMove;
-//			}
-//		}
-//		
-//		//Take the maxDisksGained and find out which moves have the same value as maxDisksGained and add that to a list
-//		for (int i = 0; i < numOfPiecesJumped.size(); i++) {
-//			if (numOfPiecesJumped.get(i) == maxDisksGained) {
-//				sameNumOfGainableDisks.add(i);
-//			}
-//		}
-//		
-//		//Then pick a random cell from sameNumOfGainableDisks and add that to the board
-//		Random rand = new Random();
-//		int num = rand.nextInt(sameNumOfGainableDisks.size());
-//			
-//		int aMove = sameNumOfGainableDisks.get(num);
-//			
-//		return aMove;
-//	}
+	private static int simpleMaxStrat() { // Simple Maximum Disk Strategy
+		
+		int maxPiecesFlips = 0;
+		MoveReturnCode temp;
+		ArrayList<Integer> flips;
+		ArrayList<Integer> sameNumOfFlippablePieces = new ArrayList<Integer>();
+		
+		/**
+		 * Get the MoveReturnCode, then take that and get the Flips from that return code. Then find the
+		 *  maximum flips list size and use that as the maximum number of gained flips.
+		 */
+		for (int i = 0; i < validMoves.size(); i++) {
+			
+			temp = validMoves.get(i);
+			flips = temp.getFlips();
+			int piecesFlips = flips.size();
+			
+			if (piecesFlips >= maxPiecesFlips) {
+				maxPiecesFlips = piecesFlips;
+			}
+		}
+		
+		/**
+		 * Find out which lists have the same size as maxPiecesGained and add that to a list of moves that all 
+		 *  have that same size length.
+		 */
+		for (int i = 0; i < validMoves.size(); i++) {
+			
+			temp = validMoves.get(i);
+			flips = temp.getFlips();
+			int piecesGained = flips.size();
+			
+			if (piecesGained == maxPiecesFlips) {
+				sameNumOfFlippablePieces.add(i);
+			}
+		}
+		
+		//Then pick a random move from sameNumOfGainablePieces and add that to the board
+		
+		Random rand = new Random();
+		int num = rand.nextInt(sameNumOfFlippablePieces.size());
+			
+		int aMove = sameNumOfFlippablePieces.get(num);
+		
+		return aMove;
+	}
 	
-//	private static int complexMaxStrat() { // Complex Maximum Disk Strategy
-//		
-//		int maxDisksJumped = 0;
-//		
-//		ArrayList<Integer> sameNumOfGainableDisks = new ArrayList<Integer>();
-//		ArrayList<Integer> duplicateFinder = new ArrayList<Integer>();
-//		
-//		/**
-//		 * This loop finds the maximum number of disks gained through complex moves
-//		 *  Complex moves are moves that have multiple possible moves to a single spot. This comes up with 
-//		 *  a single value of the maximum number of pieces jumped.
-//		 */
-//		
-//		for (int i = 0; i < numOfPiecesJumped.size(); i++) {
-//			// This will set the first value it gets as the max because the disks gained is always 1 or more
-//			int disksJumped = numOfPiecesJumped.get(i);
-//			// should always be true for the first value
-//		
-//			
-//			for (int j = 0; j < finalCellsList.size(); j++) {
-//				if (finalCellsList.get(i) == finalCellsList.get(j)) {
-//					if (j != i) { // we don't want the comparison cell to be added to itself
-//						disksJumped += numOfPiecesJumped.get(j);
-//					}
-//				}
-//			}
-//			
-//			if (disksJumped > maxDisksJumped) {	
-//				maxDisksJumped = disksJumped;
-//				System.out.println("maxDisksJumped : " + maxDisksJumped);
-//			}
-//		}
-//		
-//		/**
-//		 * This loop goes through all of the available complex moves with how many disks they gain to try and find
-//		 *  values that are equal to the maximum number of disks gained. It then adds these moves to a list.
-//		 */
-//		
-//		for (int i = 0; i < numOfPiecesJumped.size(); i++) {
-//			int addedValues = 0;
-//			
-//			for (int j = 0; j < numOfPiecesJumped.size(); j++) {
-//				if (finalCellsList.get(i) == finalCellsList.get(j)) {
-//					if (j != i) { // We don't want to add the cell to itself
-//						addedValues += numOfPiecesJumped.get(i);
-//					}
-//				}
-//			}
-//			
-//			/** 
-//			 * Hey if the value is the same as the max add it, except if its already there, burn it, 
-//			 * we don't want false justifications for how many moves there really are.
-//			 */
-//			
-//			if ((addedValues + 1) == maxDisksJumped) {
-//				if (!duplicateFinder.contains(finalCellsList.get(i))) {
-//					System.out.println("C Adding value : " + i );
-//					sameNumOfGainableDisks.add(i);
-//					duplicateFinder.add(finalCellsList.get(i));
-//				} else { // Found a duplicate, don't add it to the list.
-//					System.out.println("C Skipping value : " + i );
-//				}
-//			}
-//		}
-//		
-//		/**
-//		 * A final for loop to add any simple max disk moves that might be lying around to the list of maximum
-//		 * moves possible
-//		 */
-//		
-//		for (int i = 0; i < numOfPiecesJumped.size(); i++) {
-//			if (numOfPiecesJumped.get(i) == maxDisksJumped) {
-//				sameNumOfGainableDisks.add(i);
-//			}
-//		}
-//
-//		/**
-//		 * Lastly pick a random cell from sameNumOfGainableDisks and return that move
-//		 * 
-//		 * There should  A L W A Y S  be at least  O N E  value in the sameNumOfGainableDisks
-//		 *  list, otherwise this  W I L L  die, crash, and burn killing itself along with the other
-//		 *  methods and thousands of print statements. We don't want that now do we?
-//		 * 
-//		 *  ... unless there's no moves, then it dies rather easily.
-//		 *  
-//		 *  Including a fail safe for this statement will cover up any bugs and it would only rely on the first
-//		 *   move rather than picking one at random. So it is out of the best interest to not include one even 
-//		 *   though this is likely to be going against standard coding conventions. Thats the way it has to be.
-//		 *   
-//		 *   Like how Edna Mode never said, NO FAILSAFES!
-//		 */
-//		
-//		int aMove = -1;
-//		
-//		// if this statement can't come up with a random number, its taking the whole program with it
-//		if (sameNumOfGainableDisks.size() != 0) { 
-//			Random rand = new Random();
-//			int num = rand.nextInt(sameNumOfGainableDisks.size());
-//			aMove = sameNumOfGainableDisks.get(num);
-//		} else {
-//			// if true, die.
-////			System.out.println("C ERROR : Unable to find a move with " + maxDisksJumped + " disks jumped.");
-//			System.out.println("C Uhhhh... haha... that wasn't supposed to happen... thats it for me folks.");
-//		}
-//		
-//		return aMove;
-//	}
+	/**
+	 * Talk about complexity, because this method is full of it. It even has the same pieces of 
+	 *  code 3 times. THREE TIMES.
+	 * 
+	 * This is the more complex cousin of the simple maximum disk strategy. This is because it takes
+	 *  into account multiple moves that can move to the same cell rather than just the maximum number
+	 *  of disks gained by one move.
+	 * 
+	 * @return This returns an integer which lines up with the value of which valid move the program
+	 *  should make based on the complex maximum disk strategy
+	 */
+	
+	private static int complexMaxStrat() { // Complex Maximum Disk Strategy
+		
+		/**
+		 * ♫   E V E R Y W H E R E   I   L O O K,   I   S E E   D U P L I C A T E   C O D E   !   ♫
+		 * ♫   B U T   D O N ' T   W O R R Y   ,   T H E   C O D E   W O R K S   .   ♫ 
+		 * 
+		 * 
+		 * ♫   I S   I T   E F F I C I E N T   ?   ♫ 
+		 * ♫   N O   S I R ' E   ♫
+		 * ♫   B U T   D O E S   I T   W O R K   E F F E C T I V E L Y   ?   ♫
+		 * ♫   ~   N O P E  .   ♫
+		 */
+		
+		int maxPiecesFlipped = 0, firstFinalCell, secondFinalCell;
+		MoveReturnCode firstCode, secondCode;
+		ArrayList<Integer> firstFlips, secondFlips;
+		ArrayList<Integer> sameNumOfFlippablePieces = new ArrayList<Integer>();
+		ArrayList<Integer> duplicateFinder = new ArrayList<Integer>();
+		
+		/**
+		 * This loop finds the maximum number of Pieces gained through complex moves
+		 *  Complex moves are moves that have multiple possible moves to a single spot. This comes up with 
+		 *  a single value of the maximum number of pieces flips.
+		 */
+		
+		for (int i = 0; i < validMoves.size(); i++) {
+
+			firstCode = validMoves.get(i);
+			firstFlips = firstCode.getFlips();
+			firstFinalCell = firstCode.getFinalCell();
+			int firstPiecesFlipped = firstFlips.size();
+			int piecesFlipped = firstPiecesFlipped;
+			
+			for (int j = 0; j < validMoves.size(); j++) {
+
+				secondCode = validMoves.get(j);
+				secondFlips = secondCode.getFlips();
+				secondFinalCell = secondCode.getFinalCell();
+				int secondPiecesFlipped = secondFlips.size();
+				
+				if (firstFinalCell == secondFinalCell) {
+					if (j != i) { // we don't want the comparison cell to be added to itself
+						piecesFlipped += secondPiecesFlipped;
+					}
+				}
+			}
+			
+			if (piecesFlipped > maxPiecesFlipped) {	
+				maxPiecesFlipped = piecesFlipped;
+				
+			}
+		}
+		
+		/**
+		 * This loop goes through all of the available complex moves with how many pieces they gain to try and find
+		 *  values that are equal to the maximum number of Pieces gained. It then adds these moves to a list.
+		 */
+		
+		for (int i = 0; i < validMoves.size(); i++) {
+
+			firstCode = validMoves.get(i);
+			firstFlips = firstCode.getFlips();
+			firstFinalCell = firstCode.getFinalCell();
+			int firstPiecesFlipped = firstFlips.size();
+			int piecesFlipped = firstPiecesFlipped;
+			
+			for (int j = 0; j < validMoves.size(); j++) {
+				secondCode = validMoves.get(j);
+				secondFlips = secondCode.getFlips();
+				secondFinalCell = secondCode.getFinalCell();
+				int secondPiecesFlips = secondFlips.size();
+				
+				if (firstFinalCell == secondFinalCell) {
+					if (j != i) { // we don't want the comparison cell to be added to itself
+						piecesFlipped += secondPiecesFlips;
+					}
+				}
+			}
+			
+			if (piecesFlipped == maxPiecesFlipped) {	
+				if (!duplicateFinder.contains(firstFinalCell)) {  // Value was not a duplicate, add it to the list
+					sameNumOfFlippablePieces.add(i);
+					duplicateFinder.add(firstFinalCell);
+				}
+			}
+		}
+		
+		/**
+		 * A final for loop to add any simple max disk moves that might be lying around to the list of maximum
+		 * moves possible
+		 */
+		
+		for (int i = 0; i < validMoves.size(); i++) {
+			firstCode = validMoves.get(i);
+			firstFlips = firstCode.getFlips();
+			int piecesFlipped = firstFlips.size();
+			
+			if (piecesFlipped == maxPiecesFlipped) {
+				sameNumOfFlippablePieces.add(i);
+			}
+		}
+
+		/**
+		 * Lastly pick a random cell from sameNumOfGainablePieces and return that move
+		 * 
+		 * There should  A L W A Y S  be at least  O N E  value in the sameNumOfGainablePieces
+		 *  list, otherwise this  W I L L  die, crash, and burn killing itself along with the other
+		 *  methods and thousands of print statements. We don't want that now do we?
+		 * 
+		 *  ... unless there's no moves, then it dies rather easily.
+		 *  
+		 *  Including a fail safe for this statement will cover up any bugs and it would only rely on the first
+		 *   move rather than picking one at random. So it is out of the best interest to not include one even 
+		 *   though this is likely to be going against standard coding conventions. Thats the way it has to be.
+		 *   
+		 *   Like how Edna Mode never said, NO FAILSAFES!
+		 */
+		
+		int aMove = -1;
+		
+		// if this statement can't come up with a random number, its taking the whole program with it
+		if (sameNumOfFlippablePieces.size() != 0) { 
+			Random rand = new Random();
+			int num = rand.nextInt(sameNumOfFlippablePieces.size());
+			aMove = sameNumOfFlippablePieces.get(num);
+		} else {
+			// if true, die.
+			System.out.println("C Uhhhh... haha... that wasn't supposed to happen... thats it for me folks.");
+		}
+		
+		return aMove;
+	}
 	
 	
 	/**
@@ -947,6 +978,17 @@ public class gameBoard {
 					
 					// lets modernize the method in which we play
 					switch (playMode) {
+					
+						/** 
+						 * 0 : First move generated (DEFAULT) 					(Working)
+						 * 1 : Random 											(Working)
+						 * 2 : Simple maximum disk strategy						(Working)
+						 * 3 : Complex maximum disk strategy					(Working)
+						 * 4 : Weighted board									(Not Implemented)
+						 * 5 : Complex maximum disk strategy & weighted board	(Not Implemented) (Time?)
+						 * 6 : Alpha/beta										(Not Implemented)
+						 */
+					
 						default :
 							temp = validMoves.get(0);
 							break;
@@ -956,12 +998,10 @@ public class gameBoard {
 							temp = validMoves.get(randy);
 							break;
 						case 2 :
-//							temp = validMoves.get(simpleMaxStrat());
-							System.out.println("This strategy is broken, using default.");
+							temp = validMoves.get(simpleMaxStrat());
 							break;
 						case 3 :
-							System.out.println("This strategy is broken, using default.");
-//							temp = validMoves.get(complexMaxStrat());
+							temp = validMoves.get(complexMaxStrat());
 							break;
 						case 4 :  
 							System.out.println("This strategy is not currently implemented yet, using default.");
@@ -1075,6 +1115,8 @@ public class gameBoard {
 						
 							/**
 							 * This check is terribly written
+							 * 
+							 * I agree, but I also refuse to fix it.
 							 */
 
 							if (validMoves.size() > 0 && !myTurn) {
@@ -1110,6 +1152,15 @@ public class gameBoard {
 	}
 
 	public static void main(String[] args) {
+		
+		/**
+		 * Well this is where it all starts.
+		 * 
+		 * Regarding the comments, they may be extremely formal or literal screaming, there is no in-between.
+		 * 
+		 * Strangely the more hectic I get with the comments (screaming) the more efficient a portion of the 
+		 *  code might get...
+		 */
 		
 		if (args.length == 2) {
 			printMode = Integer.parseInt(args[0]);
